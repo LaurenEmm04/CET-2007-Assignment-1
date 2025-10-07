@@ -7,20 +7,7 @@ namespace CE2007A1
 
         static void Main(string[] args)
         {
-
-            // declare the list
-            List<Player> players = new List<Player>();
-
-            // Add a player to the list (manual)
-            players.Add(new Player(1, "Sarah"));
-            players.Add(new Player(2, "Chris"));
-
-            // Access the list (e.g., iterate or search)
-            foreach (var player in players)
-            {
-                // do something with addin player
-            }
-
+            PlayerManager playerManager = new PlayerManager();
             while (true)
             {
                 Console.WriteLine("Hi there!");
@@ -37,28 +24,7 @@ namespace CE2007A1
 
                 else if (choice == "1")
                 {
-                    Console.WriteLine("Please enter the name of the player you wish to add");
-                    string Username = Console.ReadLine();
-                    Console.WriteLine("Please enter the ID you wish your player to have");
-                    string id = Console.ReadLine();
-                    if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id))
-                    {
-                        Console.WriteLine("You need to add a Username and an ID");
-                    }
-                    else if (!id.All(char.IsDigit))  //checks that its a number. info found at https://www.geeksforgeeks.org/c-sharp/c-sharp-char-isdigit-method/
-                    {
-                        Console.WriteLine("The ID must contain numbers only");
-                    }
-                    else
-                    {
-                        int ID = int.Parse(id); //converts string ID to int ID for easier handling
-                        Console.WriteLine($"Added player {Username} with ID {ID} to list of players");
-                    }
-                    
-                    //logic to add Username and ID to list
-                    
-                    
-                    
+                    playerManager.AddPlayers(); //calls the block for adding players
                 }
                 else if (choice == "2")
                 {
@@ -90,6 +56,44 @@ namespace CE2007A1
                 PlayerStats = new Stats(0, 0);  //blank values when players are made
             }
         }
+
+        class PlayerManager
+        {
+            List<Player> list = new List<Player>();
+
+            public PlayerManager()
+            {
+                list.Add(new Player(1, "Sarah"));
+                list.Add(new Player(2, "Chris"));
+            }
+
+            public void AddPlayers()
+            {
+                Console.WriteLine("Please enter the name of the player you wish to add");
+                string Username = Console.ReadLine();
+                Console.WriteLine("Please enter the ID you wish your player to have");
+                string id = Console.ReadLine();
+                if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id))
+                {
+                    Console.WriteLine("You need to add a Username and an ID");
+                }
+                else if (!id.All(char.IsDigit))  //checks that its a number. info found at https://www.geeksforgeeks.org/c-sharp/c-sharp-char-isdigit-method/
+                {
+                    Console.WriteLine("The ID must contain numbers only");
+                }
+                else
+                {
+                    int ID = int.Parse(id); //converts string ID to int ID for easier handling
+                    Console.WriteLine($"Added player {Username} with ID {ID} to list of players");
+                }
+
+                //need to add logic to add Username and ID to list
+
+
+            }
+         
+        }
+
 
         class Stats : IUpdatableStats
         {
