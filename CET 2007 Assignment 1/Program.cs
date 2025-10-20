@@ -88,6 +88,8 @@ namespace CE2007A1
                     int ID = int.Parse(id); //converts string ID to int ID for easier handling
                     Console.WriteLine($"Added player {Username} with ID {ID} to list of players");
                     players.Add(new Player(ID, Username)); // user inputted player is added to the list
+                    
+                    
                 }
 
 
@@ -107,6 +109,40 @@ namespace CE2007A1
                 this.HoursPlayed = hoursPlayed;
                 this.HighScore = highScore;
             }
+
+            public void RecordStats()
+            {
+                int Hours;
+                
+                    Console.WriteLine("How many hours have you played on GAME?");
+                    string HoursPlayed= Console.ReadLine();
+                if (int.TryParse(HoursPlayed, out Hours) && Hours >= 0)
+                {
+                    UpdateHoursPlayed(Hours);
+                }
+                else 
+                {
+                    Console.WriteLine("Sorry, this isnt a valid input. Please enter a postive number");
+                }
+
+
+
+
+                    Console.WriteLine("Have you achieved a high score this time in GAME? /n Please answer Yes or No");
+                    string isHighScore = Console.ReadLine();
+                    if (isHighScore == "yes" || isHighScore == "Yes" || isHighScore == "y" || isHighScore == "Y")
+                    {
+                        Console.WriteLine("New high score logged into the system");
+                    }
+                    else
+                    {
+                    Console.WriteLine("Aww, thats a shame, better luck next time!");
+                    }
+                }
+                
+                
+            }
+
 
             public void UpdateHighScore(int NewScore)
             {
@@ -130,7 +166,7 @@ namespace CE2007A1
             void UpdateHoursPlayed(int newhours);
         }
 
-        class Game
+        class Game   //considering theres so many games in the game liubary it should be an abstract class for things like the name and id possibly genre
         {
             public int GameID { get; set; }
             public string GameName { get; set; }
@@ -150,7 +186,7 @@ namespace CE2007A1
 
             public void AddGame(Game game) 
             {
-                //game logic in here
+                // new game in game libary
             }
             public Game FindGameByID(int id)
             {
