@@ -59,10 +59,12 @@ namespace CE2007A1
 
         class PlayerManager
         {
-            List<Player> list = new List<Player>();
+            private List<Player> list = new List<Player>(); //only player manager can access and change this
 
             public PlayerManager()
             {
+                //players will be added by AddPlayers()
+                // any added players are for testing only
                 list.Add(new Player(1, "Sarah"));
                 list.Add(new Player(2, "Chris"));
             }
@@ -85,9 +87,9 @@ namespace CE2007A1
                 {
                     int ID = int.Parse(id); //converts string ID to int ID for easier handling
                     Console.WriteLine($"Added player {Username} with ID {ID} to list of players");
+                    players.Add(new Player(ID, Username)); // user inputted player is added to the list
                 }
 
-                //need to add logic to add Username and ID to list
 
 
             }
@@ -127,5 +129,47 @@ namespace CE2007A1
             void UpdateHighScore(int newscore);
             void UpdateHoursPlayed(int newhours);
         }
-    }
+
+        class Game
+        {
+            public int GameID { get; set; }
+            public string GameName { get; set; }
+            public string GameGenre { get; set; }
+
+            public Game(int  gameID, string gameName, string GameGenre)
+            {
+                this.GameID = gameID;
+                this.GameName = gameName;
+                this.GameGenre = GameGenre;
+
+            }
+        }
+        class GameLibrary
+        {
+            List<Game> games = new List<Game>();
+
+            public void AddGame(Game game) 
+            {
+                //game logic in here
+            }
+            public Game FindGameByID(int id)
+            {
+                //search logic
+            }
+            public void RemoveGame(Game game)
+            {
+                games.Remove(game); //maybe??
+            }
+
+            class Leaderboards
+            {
+                public List<Player> TopPlayersFromScore(List<Player> players) 
+                {
+                    //sort player by high score
+                }
+                public List<Player> TopActivePlayers(List<Player> players)
+                {
+                    //sort player by top activity
+                }
+            }
 }
