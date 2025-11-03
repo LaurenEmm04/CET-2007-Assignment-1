@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CE2007A1
 {
@@ -26,7 +25,7 @@ namespace CE2007A1
 
                 else if (choice == "1")
                 {
-                    playerManager.AddPlayers(); //calls the block for adding players
+                    playerManager.AddPlayers(gameLibrary); //calls the block for adding players
                 }
                 else if (choice == "2")
                 {
@@ -106,7 +105,7 @@ namespace CE2007A1
                 list.Add(new Player(2, "Chris"));
             }
 
-            public void AddPlayers()
+            public void AddPlayers(GameLibrary gameLibrary)
             {
                 Console.WriteLine("Please enter the name of the player you wish to add");
                 string Username = Console.ReadLine();
@@ -115,28 +114,92 @@ namespace CE2007A1
                 if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id))
                 {
                     Console.WriteLine("You need to add a Username and an ID");
+                    return;
                 }
-                else if (!id.All(char.IsDigit))  //checks that its a number
+                bool isNumber = true;
+                foreach (char c in id)
                 {
-                    Console.WriteLine("The ID must contain numbers only");
+                    if (c < '0' || c > '9')
+                    {
+                        isNumber = false;
+                        break;
+                    }
+                }
+                if (!isNumber)
+                {
+                    Console.WriteLine("ID must only contain numbers");
+                    return; //stops crashing errors via parse by taking the user back to input id again
+                }
+
+                int ID = int.Parse(id);
+
+                //check for duplicate ids
+                foreach (var player in list)
+                {
+                    if (player.ID == ID)
+                    {
+                        Console.WriteLine($"A player with ID {id} already exists. Please try a different ID");
+                        return;
+                    }
+                }
+
+                //check for duplicate username
+                foreach (var player in list)
+                {
+                    if (player.Username == Username)
+                    {
+                        Console.WriteLine($"A player with username {Username} already exists, Please try another one");
+                        return;
+                    }
+                }
+
+              
+                Player newPlayer = new Player(ID, Username);
+                list.Add(newPlayer);
+                Console.WriteLine($"Added player {Username} with ID {ID} to list of players");
+
+                Console.WriteLine("Would you like to update their gaming stats?");
+                string UpdateChoice = Console.ReadLine();
+                if (UpdateChoice == "yes" || UpdateChoice == "Yes" || UpdateChoice == "Y" || UpdateChoice == "y")
+                {
+                    newPlayer.PlayerStats.RecordStats(gameLibrary);
                 }
                 else
                 {
-                    int ID = int.Parse(id);
-                    Console.WriteLine($"Added player {Username} with ID {ID} to list of players");
-                    list.Add(new Player(ID, Username));
+                    Console.WriteLine("No worries! Feel free to record gaming stats later.");
+                    Console.WriteLine("Taking you back to the main menu now..");
+                    Console.WriteLine("Please press any key");
+                    Console.ReadKey();
+                    return;
                 }
             }
 
-            
+
+
+
+
             public Player FindPlayerByID(int id)
             {
-                return list.FirstOrDefault(p => p.ID == id);
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].ID == id)
+                    {
+                        return list[i];
+                    }
+                }
+                return null;
             }
 
             public Player FindPlayerByUsername(string username)
             {
-                return list.FirstOrDefault(p => p.Username == username);
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].Username.ToLower() == username.ToLower())
+                    {
+                        return list[i];
+                    }
+                }
+                return null;
             }
         }
 
@@ -146,56 +209,75 @@ namespace CE2007A1
 
             public void RecordStats(GameLibrary gameLibrary) //enables use of Game and GameGenre
             {
-                Console.WriteLine("Which game are you updating stats for? (please enter a game name)");
-                string gameNameInput = Console.ReadLine();
-
-                Game selectedGame = gameLibrary.FindGameByName(gameNameInput);
-                if (selectedGame == null)
+                if (!gameLibrary.HasGames())
                 {
-                    Console.WriteLine("That game isn't in here! Add it instead!");
-                    return;
+                    Console.WriteLine("Your game library is empty! You need to add atleast one game!");
+                    gameLibrary.AddGame();
+                }
+                Game chosenGame = null;
+
+                //loop until a game is chosen
+                while (chosenGame == null)
+                {
+                    Console.WriteLine("Which game are you updating stats for? (please enter a game name)");
+                    string gameNameInput = Console.ReadLine();
+
+                    chosenGame = gameLibrary.FindGameByName(gameNameInput);
+                    if (chosenGame == null)
+                    {
+                        Console.WriteLine("That game isn't in here! Add it instead!");
+                        return;
+                    }
                 }
 
-                GameStats gameStats = GameStatsList.FirstOrDefault(gs => gs.Game == selectedGame);
+                GameStats gameStats = null;
+                foreach (var gs in GameStatsList)
+                {
+                    if (gs.Game == chosenGame)
+                    {
+                        gameStats = gs;
+                        break;
+                    }
+                }
                 if (gameStats == null)
                 {
-                    gameStats = new GameStats(selectedGame);
+                    gameStats = new GameStats(chosenGame);
                     GameStatsList.Add(gameStats);
                 }
 
-                Console.WriteLine($"How many hours have you played on {selectedGame.GameName}?");
+                Console.WriteLine($"How many hours have you played on {chosenGame.GameName}?");
                 string HoursPlayedInput = Console.ReadLine();
                 if (int.TryParse(HoursPlayedInput, out int hours) && hours >= 0)
                 {
                     gameStats.HoursPlayed += hours;
-                    Console.WriteLine($"Updated hours played for {selectedGame.GameName}: {gameStats.HoursPlayed}");
+                    Console.WriteLine($"Updated hours played for {chosenGame.GameName}: {gameStats.HoursPlayed}");
                 }
                 else
                 {
                     Console.WriteLine("Sorry, you need to add a positive number");
                 }
 
-                Console.WriteLine($"Have you achieved a high score this time in {selectedGame.GameName}? \nPlease answer Yes or No");
+                Console.WriteLine($"Have you achieved a high score this time in {chosenGame.GameName}? \nPlease answer Yes or No");
                 string isHighScore = Console.ReadLine();
                 if (isHighScore == "yes" || isHighScore == "Yes" || isHighScore == "y" || isHighScore == "Y")
                     {
-                    Console.WriteLine($"What is your new high score in {selectedGame.GameName}?");
+                    Console.WriteLine($"What is your new high score in {chosenGame.GameName}?");
                     string NewScoreInput = Console.ReadLine();
                     if (int.TryParse(NewScoreInput, out int newScore))
                     {
                         if (newScore > gameStats.HighScore)
                         {
                             gameStats.HighScore = newScore;
-                            Console.WriteLine($"New high score logged into the system: {selectedGame.GameName}");
+                            Console.WriteLine($"New high score logged into the system: {chosenGame.GameName}");
                         }
                         else
                         {
-                            Console.WriteLine($"Your score wasn't higher than your existing one! Current high score to beat: {gameStats.HighScore}.");
+                            Console.WriteLine($"Your score wasn't higher than your existing one! \nCurrent high score to beat: {gameStats.HighScore}.");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("That’s not a valid number!");
+                        Console.WriteLine("Thats not a valid number!");
                     }
                 }
                 else
@@ -203,6 +285,7 @@ namespace CE2007A1
                     Console.WriteLine("Aww, that's a shame, better luck next time!");
                 }
             }
+
 
             private class GameStats
             {
@@ -218,25 +301,47 @@ namespace CE2007A1
                 }
             }
 
-            public void UpdateHighScore(Game selectedGame, int newScore) 
+            public void UpdateHighScore(Game selectedGame, int newScore)
             {
-                var gameStats = GameStatsList.FirstOrDefault(gs => gs.Game == selectedGame);  //finds existing game stats object for the game instead of making a new one every time 
-                if (gameStats != null && newScore>gameStats.HighScore)
+                GameStats gameStats = null;
+                foreach (var gs in GameStatsList)
+                {
+                    if (gs.Game == selectedGame)
+                    {
+                        gameStats = gs;
+                        break;
+                    }
+                    
+                }
+                if (gameStats != null && newScore > gameStats.HighScore)
                     gameStats.HighScore = newScore;
+                
             }
+            
+            
 
             public void UpdateHoursPlayed(Game selectedGame, int newHours)
             {
-                var gameStats = GameStatsList.FirstOrDefault(gs => gs.Game == selectedGame);
-                if (gameStats != null && newHours > 0)
-                    gameStats.HoursPlayed += newHours;
+                GameStats stats = null;
+                foreach (var gs in GameStatsList)
+                {
+                    if (gs.Game == selectedGame)
+                    {
+                        stats = gs;
+                        break;
+                    }
+                }
+                if (stats != null && newHours>0)
+                    stats.HoursPlayed += newHours;
+                
+                  
             }
         }
 
         interface IUpdatableStats
         {
-            void UpdateHighScore(int newscore);
-            void UpdateHoursPlayed(int newhours);
+            void UpdateHighScore(Game selectedGame, int newscore);
+            void UpdateHoursPlayed(Game selectedGame, int newhours);
             void RecordStats(GameLibrary gameLibrary);
         }
 
@@ -262,10 +367,23 @@ namespace CE2007A1
 
         class GameLibrary
         {
-            List<Game> games = new List<Game>();
+            private List<Game> games = new List<Game>();
+            public bool HasGames()
+            {
+                return games.Count > 0;
+            }
+
+            public GameLibrary()
+            {
+                //default games to make sure there is something here
+                games.Add(new Game("Minecraft", "Sandbox"));
+                games.Add(new Game("Stardew Valley", "Farming"));
+                games.Add(new Game("Spirit of the North", "Adventure"));
+            }
 
             public void AddGame(Game game = null)
             {
+                //if a game object is passed through, add it in
                 if (game != null)
                 {
                     games.Add(game);
@@ -283,19 +401,51 @@ namespace CE2007A1
                     Console.WriteLine("Please enter a name and a genre of your game in the areas provided");
                     return;
                 }
+
+                foreach (var existingGame in games) 
+                {
+                    if (existingGame.GameName.ToLower() == GName.ToLower())
+                    {
+                        Console.WriteLine($"This game {GName} already exists in the library!");
+                        return; //doesnt add it to the library
+                    }
+                }
+
+                //adding new games
                 Game NewGame = new Game(GName, GGenre);
                 games.Add(NewGame);
                 Console.WriteLine("You have added a new game to your game library!");
             }
 
             public Game FindGameByID(int GID)
-            {
-                return games.FirstOrDefault(g => g.GameID == GID);
+            {   //looping through all library games
+                foreach (var game in games)
+                {
+                    if (game.GameID == GID)
+                    {
+                        return game;
+                    }
+                   
+                }
+
+                Console.WriteLine("Sorry, your game can't be found. Please retry");
+                return null;
             }
+
 
             public Game FindGameByName(string GName)
             {
-                return games.FirstOrDefault(g => g.GameName == GName);
+                foreach (var game in games)
+                {
+                    if (game.GameName.ToLower() == GName.ToLower())
+                    {
+                        return game;
+                    }
+                    
+                }
+                Console.WriteLine("Sorry, your game can't be found. Please retry");
+                return null;
+
             }
         }
 
