@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.IO;
 
 namespace CE2007A1
 {
@@ -8,6 +10,7 @@ namespace CE2007A1
         static void Main(string[] args)
         {
             PlayerManager playerManager = new PlayerManager();
+            playerManager.LoadPlayerFromFile();
             GameLibrary gameLibrary = new GameLibrary();
             while (true)
             {
@@ -17,11 +20,14 @@ namespace CE2007A1
                 Console.WriteLine("1. Add a new player and record their gaming stats");
                 Console.WriteLine("2. Update a current players stats");
                 Console.WriteLine("3. View a current players stats");
-                Console.WriteLine("4. Exit");
+                Console.WriteLine("4. Exit and save");
                 string choice = Console.ReadLine();
 
                 if (choice == "4")
+                {
+                    playerManager.SavePlayerToFile();
                     break;
+                }
 
                 else if (choice == "1")
                 {
@@ -83,13 +89,19 @@ namespace CE2007A1
         {
             public int ID { get; set; }
             public string Username { get; set; }
-            public IUpdatableStats PlayerStats { get; set; } //links to stats block
+            public Stats PlayerStats { get; set; } //links to stats block
 
             public Player(int id, string username)
             {
                 this.ID = id;
                 this.Username = username;
                 PlayerStats = new Stats();
+            }
+            public Player() { } //empty constructor for json loading
+
+            public IUpdatableStats GetStatsInterface()
+            {
+                return PlayerStats;
             }
         }
 
@@ -201,11 +213,62 @@ namespace CE2007A1
                 }
                 return null;
             }
+
+            public void SavePlayerToFile()
+            {
+                try
+                {
+                    string Json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true});
+                    File.WriteAllText("Players.json", Json);
+                    Console.WriteLine("Players have been saved to the file!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error saving players: " + ex.Message);
+                }
+            }
+
+            public void LoadPlayerFromFile()
+            {
+                try
+                {
+                    if (!File.Exists ("Players.json"))
+                    {
+                        Console.WriteLine("You havn't saved any players yet! Go save some!");
+                        return;
+                    }
+
+                    string Json = File.ReadAllText("Players.json");
+
+                    if (string.IsNullOrWhiteSpace(Json))
+                    {
+                        Console.WriteLine("No saved players are found. Add players to begin");
+                        return;
+                    }
+                    list = JsonSerializer.Deserialize<List<Player>>(Json);
+                    Console.WriteLine("Players have been loaded from the file!");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error loading players: " + e.Message);
+                }
+
+               
+            }
         }
 
         class Stats : IUpdatableStats
         {
-            private List<GameStats> GameStatsList = new List<GameStats>();
+            public List<GameStats> GameStatsList { get; set; } = new List<GameStats>();
+          
+
+
+            public Stats() { }
+
+            public IReadOnlyList<GameStats> GetGameStats()
+            {
+                return GameStatsList.AsReadOnly();
+            }
 
             public void RecordStats(GameLibrary gameLibrary) //enables use of Game and GameGenre
             {
@@ -233,7 +296,7 @@ namespace CE2007A1
                 GameStats gameStats = null;
                 foreach (var gs in GameStatsList)
                 {
-                    if (gs.Game == chosenGame)
+                    if (gs.Game == chosenGame.GameName)
                     {
                         gameStats = gs;
                         break;
@@ -286,27 +349,12 @@ namespace CE2007A1
                 }
             }
 
-
-            private class GameStats
-            {
-                public Game Game { get; private set; }
-                public int HoursPlayed { get; set; }
-                public int HighScore { get; set; }
-
-                public GameStats(Game game)
-                {
-                    Game = game;
-                    HoursPlayed = 0;
-                    HighScore = 0;
-                }
-            }
-
             public void UpdateHighScore(Game selectedGame, int newScore)
             {
                 GameStats gameStats = null;
                 foreach (var gs in GameStatsList)
                 {
-                    if (gs.Game == selectedGame)
+                    if (gs.Game == selectedGame.GameName)
                     {
                         gameStats = gs;
                         break;
@@ -325,7 +373,7 @@ namespace CE2007A1
                 GameStats stats = null;
                 foreach (var gs in GameStatsList)
                 {
-                    if (gs.Game == selectedGame)
+                    if (gs.Game == selectedGame.GameName)
                     {
                         stats = gs;
                         break;
@@ -336,16 +384,52 @@ namespace CE2007A1
                 
                   
             }
+
+            public int GetTotalPlayedHours()
+            {
+                int totalHours = 0;
+                foreach (var gs in GameStatsList)
+                {
+                    totalHours += gs.HoursPlayed;
+                }
+                return totalHours;
+            }
+
+            public int GetTotalHighScore()
+            {
+                int totalHighScore = 0;
+                foreach (var gs in GameStatsList)
+                {
+                    if (gs.HighScore > totalHighScore)
+                        totalHighScore = gs.HighScore;
+                }
+                return totalHighScore;
+            }
+        }
+
+        public class GameStats
+        {
+            public string Game { get; set; } //stores only Game not the whole object so json can read it
+            public int HoursPlayed { get; set; }
+            public int HighScore { get; set; }
+
+            public GameStats() { } //for json
+            public GameStats(Game game)
+            {
+                Game = game.GameName;
+                HoursPlayed = 0;
+                HighScore = 0;
+            }
         }
 
         interface IUpdatableStats
         {
-            void UpdateHighScore(Game selectedGame, int newscore);
-            void UpdateHoursPlayed(Game selectedGame, int newhours);
+            void UpdateHighScore(Game selectedGame, int newScore);
+            void UpdateHoursPlayed(Game selectedGame, int newHours);
             void RecordStats(GameLibrary gameLibrary);
         }
 
-        class Game
+        public class Game
         {
             private static Random ranID = new Random();
             public int GameID { get; set; }
