@@ -15,6 +15,7 @@ namespace CET2007A1
             gameLibrary.LoadGameLibraryFromFile(); //loadingthe game library
             while (true)
             {
+                Logger.GetInstance().Log("Menu loaded");
                 Console.WriteLine("Hi there!");
                 Console.WriteLine("Welcome to the player management system!");
                 Console.WriteLine("What would you like to do?");
@@ -27,13 +28,16 @@ namespace CET2007A1
 
                 if (choice == "5")
                 {
+                    Logger.GetInstance().Log("Option 5 chosen.");
                     playerManager.SavePlayerToFile(); //saving player list
                     gameLibrary.SaveGameLibraryToFile(); //saving game library
+                    Logger.GetInstance().Log("Saved player and/or game data to files.");
                     break;
                 }
 
                 else if (choice == "1")
                 {
+                    Logger.GetInstance().Log("Option 1 chosen");
                     playerManager.AddPlayers(gameLibrary); //calls the block for adding players
                 }
 
@@ -42,6 +46,7 @@ namespace CET2007A1
 
                 else if (choice == "2")
                 {
+                    Logger.GetInstance().Log("Option 2 chosen");
                     Console.WriteLine("Are you searching with Username or ID?");
                     string Search = Console.ReadLine();
                     Player FoundPlayer = null; //sets it to be empty to start
@@ -62,6 +67,7 @@ namespace CET2007A1
                         else
                         {
                             Console.WriteLine("That ID is not recognised. Please try again.");
+                            Logger.GetInstance().Log("Player ID not recognised");
                             continue;
                         }
                     }
@@ -74,24 +80,73 @@ namespace CET2007A1
                     // if found player is recognised..
                     if (FoundPlayer != null)  //found player is not null
                     {
+                        Logger.GetInstance().Log($"Player recognised as {FoundPlayer.Username} - {FoundPlayer.ID}");
                         Console.WriteLine($"Player found: {FoundPlayer.Username} ID: {FoundPlayer.ID}");
                         FoundPlayer.PlayerStats.RecordStats(gameLibrary); //calls record stats
                     }
                     else
                     {
                         Console.WriteLine("This player doesn't exist.");
+                        Logger.GetInstance().Log("Player does not exist.");
                     }
                 }
 
                 else if (choice == "3")
                 {
-                    Console.WriteLine("What players stats do you want to see?");
-                    //add viewing logic
+                    Logger.GetInstance().Log("Option 3 chosen.");
+                    Console.WriteLine("Are you searching with Username or ID?");
+                    string search = Console.ReadLine();
+                    Player FoundPlayer = null; //player has not been found
+                    if (search == "Username" || search == "username")
+                    {
+                        Console.WriteLine("Please enter the Username your looking for");
+                        string UsernameSearch = Console.ReadLine();
+                        FoundPlayer = playerManager.FindPlayerByUsername(UsernameSearch);
+
+                    }
+                    else if (search == "ID" || search == "id")
+                    {
+                        Console.WriteLine("Please enter the ID your looking for");
+                        string IDSearch = Console.ReadLine();
+
+                        if (int.TryParse(IDSearch, out int id))
+                        {
+                            FoundPlayer = playerManager.FindPlayerByID(id);
+                        }
+                        else
+                        {
+                            Console.WriteLine("That isn't recognised. Please enter a username or ID");
+                            Logger.GetInstance().Log("Search input not recognised");
+                            continue;
+                        }
+                    }
+                    
+
+                    if (FoundPlayer != null)
+                    {
+                        Logger.GetInstance().Log($"Player recognised as {FoundPlayer.Username} - {FoundPlayer.ID}");
+                        Console.WriteLine($"Player found: {FoundPlayer.Username} (ID: {FoundPlayer.ID})");
+                        Console.WriteLine("Displaying player stats now..");
+                        Logger.GetInstance().Log("Displaying stats for the player..");
+
+                        FoundPlayer.PlayerStats.DisplayStats(); //displays the stats of the found player
+                    }
+                    else
+                    {
+                        Console.WriteLine("This player doesnt exist");
+                        Logger.GetInstance().Log("Player does not exist.");
+                    }
+                    Console.WriteLine("\nPress any key to return to the menu");
+                    Logger.GetInstance().Log("Returning to menu..");
+                    Console.ReadKey();
+                  
                 }
 
                 else if (choice == "4")
                 {
+                    Logger.GetInstance().Log("Option 4 chosen.");
                     Console.WriteLine("Showing all of the games in your game library");
+                    Logger.GetInstance().Log("Displaying games list.");
                     gameLibrary.GameList();
                     while (true)
                     {
@@ -100,12 +155,15 @@ namespace CET2007A1
                         AddGames = Console.ReadLine();
                         if (AddGames == "Yes" || AddGames == "yes" || AddGames == "y" || AddGames == "Y")
                         {
+                            Logger.GetInstance().Log("Games are being added to the library");
                             gameLibrary.AddGame(); //promps for name and genre
                         }
                         else
                         {
+                            Logger.GetInstance().Log("No new games were added to the library");
                             Console.WriteLine("No new games will be added \n Returning to the main menu..");
                             Console.WriteLine("Please press any button to be redirected.");
+                            Logger.GetInstance().Log("Returning to the menu..");
                             Console.ReadKey();
                             break; //loop exit
                         }
