@@ -13,5 +13,7 @@ namespace CET2007A1
         void UpdateHoursPlayed(Game selectedGame, int newHours);
         void RecordStats(GameLibrary gameLibrary);
         void DisplayStats();
+        int GetTotalHighScore();
+        int GetTotalPlayedHours();
     }
 }

@@ -13,6 +13,7 @@ namespace CET2007A1
             playerManager.LoadPlayerFromFile();  //loading player file
             GameLibrary gameLibrary = new GameLibrary();
             gameLibrary.LoadGameLibraryFromFile(); //loadingthe game library
+            Leaderboard leaderboard = new Leaderboard(playerManager.GetAllPlayers(), gameLibrary);
             while (true)
             {
                 Logger.GetInstance().Log("Menu Loaded.");
@@ -23,12 +24,13 @@ namespace CET2007A1
                 Console.WriteLine("2. Update a current players stats");
                 Console.WriteLine("3. View a current players stats");
                 Console.WriteLine("4. View and add games in your library");
-                Console.WriteLine("5. Exit and save");
+                Console.WriteLine("5. Show current leaderboard");
+                Console.WriteLine("6. Exit and save");
                 string choice = Console.ReadLine();
 
-                if (choice == "5")
+                if (choice == "6")
                 {
-                    Logger.GetInstance().Log("Option 5 chosen. Exiting and saving..");
+                    Logger.GetInstance().Log("Option 6 chosen. Exiting and saving..");
                     playerManager.SavePlayerToFile(); //saving player list
                     gameLibrary.SaveGameLibraryToFile(); //saving game library
                     break;
@@ -172,6 +174,24 @@ namespace CET2007A1
                             break; //loop exit
                         }
                     }
+                }
+
+                else if (choice == "5")  //optionally sort per game
+                {
+                    Console.WriteLine("Would you like to sort the leaderboard by high score or hours played?");
+                    string SortChoice = Console.ReadLine();
+
+                    if (SortChoice == "High Score" || SortChoice == "high score")
+                    {
+                        Console.WriteLine("Loading leaderboard sorted by high score..");
+                        leaderboard.SortByScore();
+                    }
+                    else if (SortChoice == "Hours Played" || SortChoice == "hours played")
+                    {
+                        Console.WriteLine("Leaderboard sorted by hours played");
+                        leaderboard.SortByHoursPlayed();
+                    }
+                        leaderboard.ShowLeaderboard();
                 }
             }
         }

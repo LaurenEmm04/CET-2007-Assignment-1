@@ -134,6 +134,11 @@ namespace CET2007A1
             return null;
         }
 
+        public List<Player> GetAllPlayers()
+        {
+            return list;
+        }
+
         public void SavePlayerToFile()
         {
             try
@@ -175,5 +180,7 @@ namespace CET2007A1
 
 
         }
+
+        
     }
 }
