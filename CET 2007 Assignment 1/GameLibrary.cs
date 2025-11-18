@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace CET2007A1
 {
-    class GameLibrary
+    public class GameLibrary
     {
         private List<Game> games = new List<Game>();
-        
+
         public bool HasGames()
         {
             return games.Count > 0;
@@ -20,7 +20,6 @@ namespace CET2007A1
 
         public void GameList()
         {
-
             Console.WriteLine("Here is a list of games in the library:");
             foreach (var game in games)
             {
@@ -43,7 +42,6 @@ namespace CET2007A1
             {
                 games.Add(game);
                 Console.WriteLine($"Added game {game.GameName} - {game.GameGenre} to library!");
-
                 return;
             }
 
@@ -63,7 +61,6 @@ namespace CET2007A1
                 if (existingGame.GameName.ToLower() == GName.ToLower())
                 {
                     Console.WriteLine($"This game {GName} already exists in the library!");
-                    Logger.GetInstance().Log("Game attempted to add to library already exists. Duplicate game has not been added.");
                     return; //doesnt add it to the library
                 }
             }
@@ -71,7 +68,6 @@ namespace CET2007A1
             //adding new games
             Game NewGame = new Game(GName, GGenre);
             games.Add(NewGame);
-            Logger.GetInstance().Log($"Game: {NewGame.GameName} - Genre: {NewGame.GameGenre} has been added to the library.");
             Console.WriteLine("You have added a new game to your game library!");
         }
 
@@ -87,7 +83,6 @@ namespace CET2007A1
             }
 
             Console.WriteLine("Sorry, your game can't be found. Please retry");
-            Logger.GetInstance().Log("Game was not found.");
             return null;
         }
 
@@ -99,12 +94,10 @@ namespace CET2007A1
                 string json = JsonSerializer.Serialize(games, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText("Games.json", json);
                 Console.WriteLine("Your game libary has been written to the file!");
-                Logger.GetInstance().Log("Game library saved.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("There's been an error saving your game library :( " + ex.Message);
-                Logger.GetInstance().Log("Game library not saved");
             }
         }
 
@@ -115,23 +108,21 @@ namespace CET2007A1
                 if (!File.Exists("Games.json"))
                 {
                     Console.WriteLine("You dont seem to have a saved game library..");
-                    Logger.GetInstance().Log("Saved game library does not exist");
                     return;
                 }
                 string json = File.ReadAllText("Games.json");
                 if (string.IsNullOrWhiteSpace(json))
                 {
                     Console.WriteLine("Your game library is empty");
-                    Logger.GetInstance().Log("Game library is empty.");
                     return;
                 }
 
                 games = JsonSerializer.Deserialize<List<Game>>(json);
+                Console.WriteLine("Your game libary is displayed below!");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error loading game libary:" + ex.Message);
-                Logger.GetInstance().Log("Game libary couldn't be loaded.");
             }
         }
 
@@ -147,11 +138,10 @@ namespace CET2007A1
 
             }
             Console.WriteLine("Sorry, your game can't be found. Please retry");
-            Logger.GetInstance().Log("Game cannot be found.");
             return null;
 
         }
 
-        
+
     }
 }

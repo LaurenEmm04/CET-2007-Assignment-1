@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
@@ -22,8 +22,6 @@ namespace CET2007A1
         {
             while (true)
             {
-                Logger.GetInstance().Log("Beginning to add players.");
-
                 Console.WriteLine("Please enter the name of the player you wish to add");
                 string Username = Console.ReadLine();
                 Console.WriteLine("Please enter the ID you wish your player to have");
@@ -31,22 +29,20 @@ namespace CET2007A1
                 if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id))
                 {
                     Console.WriteLine("You need to add a Username and an ID");
-                    Logger.GetInstance().Log("Incorrect input of Username or ID, trying again.");
                     continue; //back to start of loop to reenter
                 }
                 bool isNumber = true;  //checking if id is a number
                 foreach (char c in id)
                 {
-                    if (c < '0' || c > '9')
+                    if (c < '0' || c > '9') 
                     {
-                        isNumber = false;
+                        isNumber = false; 
                         break;
                     }
                 }
                 if (!isNumber)
                 {
                     Console.WriteLine("ID must only contain numbers");
-                    Logger.GetInstance().Log("ID type mismatch");
                     continue; //stops crashing errors via parse by taking the user back to start of loop again
                 }
 
@@ -60,8 +56,6 @@ namespace CET2007A1
                     if (player.ID == ID)
                     {
                         Console.WriteLine($"A player with ID {id} already exists. Please try a different ID");
-                        Logger.GetInstance().Log("Duplicate ID detected, ID is being re inputted.");
-
                         DuplicateID = true;
                         break;
                     }
@@ -75,8 +69,6 @@ namespace CET2007A1
                     if (player.Username == Username)
                     {
                         Console.WriteLine($"A player with username {Username} already exists, Please try another one");
-                        Logger.GetInstance().Log("Duplicate Username detected, Username is being re inputted.");
-
                         DuplicateUsername = true;
                         break;
                     }
@@ -87,7 +79,6 @@ namespace CET2007A1
                 Player newPlayer = new Player(ID, Username);
                 list.Add(newPlayer);
                 Console.WriteLine($"Prepating to add player {Username} with ID {ID} to list of players");
-                Logger.GetInstance().Log($"Username: {Username} and ID: {ID} are prepared to be added to the list.");
                 Console.WriteLine("Make sure to save and exit, otherwise they wont be added!");
 
 
@@ -97,15 +88,12 @@ namespace CET2007A1
                 string UpdateChoice = Console.ReadLine();
                 if (UpdateChoice == "yes" || UpdateChoice == "Yes" || UpdateChoice == "Y" || UpdateChoice == "y")
                 {
-                    Logger.GetInstance().Log("Game stats are being updated");
-                    newPlayer.PlayerStats.RecordStats(gameLibrary);
+                    newPlayer.GetStatsInterface().RecordStats(gameLibrary);
                 }
                 else
                 {
-                    Logger.GetInstance().Log("Game stats are not being updated");
                     Console.WriteLine("No worries! Feel free to record gaming stats later.");
                 }
-                Logger.GetInstance().Log("Being redirected to the main menu..");
                 Console.WriteLine("Taking you back to the main menu now..");
                 Console.WriteLine("Remember to save before you exit!");
                 Console.WriteLine("Please press any key");

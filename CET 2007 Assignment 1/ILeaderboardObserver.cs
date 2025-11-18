@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace CET2007A1
 {
-    public interface ILeaderboardObserver
-    {
-        void Update(Player player); //called whenever a players stats change
-    }
+    
 }

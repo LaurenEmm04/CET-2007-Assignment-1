@@ -19,8 +19,16 @@ namespace CET2007A1
 
         public void Log(string message)
         {
-            string entry = $"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}";
-            File.AppendAllText(logPath, entry);  //saves to file
+            try
+            {
+                string entry = $"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}";
+                File.AppendAllText(logPath, entry);  //saves to file
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Logger error: " + ex.Message);
+            }
+            
         }
     }
 }

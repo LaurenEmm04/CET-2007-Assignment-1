@@ -9,6 +9,7 @@ namespace CET2007A1
 
 
 
+
         public Stats() { }
 
         public IReadOnlyList<GameStats> GetGameStats()
@@ -51,27 +52,22 @@ namespace CET2007A1
                 GameStatsList.Add(gameStats);
             }
 
-            Logger.GetInstance().Log($"Beginning to update hours for {chosenGame.GameName}");
             Console.WriteLine($"How many hours have you played on {chosenGame.GameName}?");
             string HoursPlayedInput = Console.ReadLine();
             if (int.TryParse(HoursPlayedInput, out int hours) && hours >= 0)
             {
                 gameStats.HoursPlayed += hours;
-                Logger.GetInstance().Log($"Hours played for {chosenGame.GameName} has been updated.");
                 Console.WriteLine($"Updated hours played for {chosenGame.GameName}: {gameStats.HoursPlayed}");
             }
             else
             {
                 Console.WriteLine("Sorry, you need to add a positive number");
-                Logger.GetInstance().Log("Incorrect input for updating game hours.");
             }
 
-            Logger.GetInstance().Log($"Asking if there is a high score for {chosenGame.GameName}");
             Console.WriteLine($"Have you achieved a high score this time in {chosenGame.GameName}? \nPlease answer Yes or No");
             string isHighScore = Console.ReadLine();
             if (isHighScore == "yes" || isHighScore == "Yes" || isHighScore == "y" || isHighScore == "Y")
             {
-                Logger.GetInstance().Log($"There is a new high score for: {chosenGame.GameName}");
                 Console.WriteLine($"What is your new high score in {chosenGame.GameName}?");
                 string NewScoreInput = Console.ReadLine();
                 if (int.TryParse(NewScoreInput, out int newScore))
@@ -80,7 +76,6 @@ namespace CET2007A1
                     {
                         gameStats.HighScore = newScore;
                         Console.WriteLine($"New high score logged into the system: {chosenGame.GameName}");
-                        Logger.GetInstance().Log($"New high score for {chosenGame.GameName} has been logged");
                     }
                     else
                     {
@@ -164,7 +159,7 @@ namespace CET2007A1
                 return;
             }
 
-            foreach(var stats in GameStatsList)
+            foreach (var stats in GameStatsList)
             {
                 Console.WriteLine($"Game: {stats.Game}");
                 Console.WriteLine($"Hours Played: {stats.HoursPlayed}");
