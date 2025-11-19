@@ -20,6 +20,7 @@ namespace CET2007A1
 
         public void GameList()
         {
+            Logger.GetInstance().Log("Displaying the game library.");
             Console.WriteLine("Here is a list of games in the library:");
             foreach (var game in games)
             {
@@ -42,6 +43,7 @@ namespace CET2007A1
             {
                 games.Add(game);
                 Console.WriteLine($"Added game {game.GameName} - {game.GameGenre} to library!");
+                Logger.GetInstance().Log($"{game.GameName} | {game.GameGenre} has been added to the library.");
                 return;
             }
 
@@ -52,6 +54,7 @@ namespace CET2007A1
             string GGenre = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(GName) || string.IsNullOrWhiteSpace(GGenre))
             {
+                Logger.GetInstance().Log("Error: Game and Genre were not correctly inputted. Retrying.");
                 Console.WriteLine("Please enter a name and a genre of your game in the areas provided");
                 return;
             }
@@ -126,6 +129,7 @@ namespace CET2007A1
 
                 games = JsonSerializer.Deserialize<List<Game>>(json);
                 Console.WriteLine("Your game libary is displayed below!");
+                Logger.GetInstance().Log("Game library displayed");
             }
             catch (Exception ex)
             {

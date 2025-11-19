@@ -8,6 +8,9 @@ namespace CET2007A1
 {
     public static class PlayerFactory
     {
-        
+        public static Player CreatePlayer(string username, int id)
+        {
+            return new Player(id, username);
+        }
     }
 }

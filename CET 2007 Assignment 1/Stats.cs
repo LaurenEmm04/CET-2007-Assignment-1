@@ -152,6 +152,7 @@ namespace CET2007A1
 
         public void DisplayStats()
         {
+
             Console.WriteLine("---- Player Stats ----");
             if (GameStatsList.Count == 0)
             {
@@ -168,5 +169,7 @@ namespace CET2007A1
             }
         }
 
+
+     
     }
 }

@@ -15,5 +15,6 @@ namespace CET2007A1
         void DisplayStats();
         int GetTotalHighScore();
         int GetTotalPlayedHours();
+        IReadOnlyList<GameStats> GetGameStats(); //lets filtered leaderboard access the game stats list
     }
 }

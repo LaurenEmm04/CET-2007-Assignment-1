@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,5 +73,32 @@ namespace CET2007A1
             }
             Console.WriteLine("--------------------------");
         }
+
+        public void ShowFilteredLeaderboard(string FilteredGame)
+        {
+            Console.WriteLine($"---- Displaying leaderboard for {FilteredGame} ----");
+            bool found = false;
+
+            foreach (var p in players)
+            {
+                var stats = p.GetStatsInterface(); //looking for game in each players stats
+                foreach (var gs in stats.GetGameStats())
+                {
+                    if (string.Equals(gs.Game, FilteredGame, StringComparison.OrdinalIgnoreCase)) //added string comparison as if you put in lowercase game name it woudnt recognise it
+                    {
+                        Console.WriteLine($"{p.Username} | High score: {gs.HighScore} | Hours Played: {gs.HoursPlayed}");
+                        found = true;
+                    }
+                }
+                
+            }
+            if (!found)
+            {
+                Console.WriteLine("No players have stats for this game yet.");
+            }
+        }
+
+
+
     }
 }

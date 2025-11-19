@@ -22,15 +22,18 @@ namespace CET2007A1
         {
             while (true)
             {
+                Logger.GetInstance().Log("Beginning to add players");
                 Console.WriteLine("Please enter the name of the player you wish to add");
                 string Username = Console.ReadLine();
                 Console.WriteLine("Please enter the ID you wish your player to have");
                 string id = Console.ReadLine();
                 if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id))
                 {
+                    Logger.GetInstance().Log("Usernmae and ID has not been entereed. Retrying.");
                     Console.WriteLine("You need to add a Username and an ID");
                     continue; //back to start of loop to reenter
                 }
+
                 bool isNumber = true;  //checking if id is a number
                 foreach (char c in id)
                 {
@@ -42,6 +45,7 @@ namespace CET2007A1
                 }
                 if (!isNumber)
                 {
+                    Logger.GetInstance().Log("ID is not a number. Retrying.");
                     Console.WriteLine("ID must only contain numbers");
                     continue; //stops crashing errors via parse by taking the user back to start of loop again
                 }
@@ -55,6 +59,7 @@ namespace CET2007A1
                 {
                     if (player.ID == ID)
                     {
+                        Logger.GetInstance().Log($"A player with ID: {id} already exists. Retrying.");
                         Console.WriteLine($"A player with ID {id} already exists. Please try a different ID");
                         DuplicateID = true;
                         break;
@@ -68,6 +73,7 @@ namespace CET2007A1
                 {
                     if (player.Username == Username)
                     {
+                        Logger.GetInstance().Log($"A player with username: {Username} already exists. Retrying.");
                         Console.WriteLine($"A player with username {Username} already exists, Please try another one");
                         DuplicateUsername = true;
                         break;
@@ -75,28 +81,35 @@ namespace CET2007A1
                 }
                 if (DuplicateUsername) continue; //goes back to the start if duplicate
 
+
                 //creating and adding players
-                Player newPlayer = new Player(ID, Username);
+                Player newPlayer = PlayerFactory.CreatePlayer(Username, ID);
                 list.Add(newPlayer);
+                Logger.GetInstance().Log($"Preparing to add {Username} with ID: {ID} to the list...");
                 Console.WriteLine($"Prepating to add player {Username} with ID {ID} to list of players");
                 Console.WriteLine("Make sure to save and exit, otherwise they wont be added!");
+                Logger.GetInstance().Log("Player creation complete.");
 
 
 
                 //asking to update stats
+                Logger.GetInstance().Log("Beginning to update stats.");
                 Console.WriteLine("Would you like to update their gaming stats?");
                 string UpdateChoice = Console.ReadLine();
                 if (UpdateChoice == "yes" || UpdateChoice == "Yes" || UpdateChoice == "Y" || UpdateChoice == "y")
                 {
+                    Logger.GetInstance().Log($"Stats are beginning to be updated for {Username} | {ID}");
                     newPlayer.GetStatsInterface().RecordStats(gameLibrary);
                 }
                 else
                 {
+                    Logger.GetInstance().Log($"Stats are not being updated for {Username} | {ID}");
                     Console.WriteLine("No worries! Feel free to record gaming stats later.");
                 }
                 Console.WriteLine("Taking you back to the main menu now..");
                 Console.WriteLine("Remember to save before you exit!");
                 Console.WriteLine("Please press any key");
+                Logger.GetInstance().Log("Returning to menu..");
                 Console.ReadKey();
                 break;
             }
