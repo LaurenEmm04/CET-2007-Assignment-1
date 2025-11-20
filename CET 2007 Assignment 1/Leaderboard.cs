@@ -17,6 +17,8 @@ namespace CET2007A1
             this.gameLibrary = gameLibrary;
         }
 
+
+        //bubble sort
         public void SortByScore()
         {
             int n = players.Count;  //stores how many people are in the list
@@ -37,6 +39,7 @@ namespace CET2007A1
             }
         }
 
+        //bubble sort
         public void SortByHoursPlayed()
         {
             int n = players.Count();

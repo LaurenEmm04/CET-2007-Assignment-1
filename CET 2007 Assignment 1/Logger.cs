@@ -3,6 +3,8 @@ using System.IO;
 
 namespace CET2007A1
 {
+
+    //singleton class for logger
     public class Logger
     {
         private static Logger instance;

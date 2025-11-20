@@ -15,7 +15,6 @@ namespace CET2007A1
 
         public Game(string gameName, string GameGenre)
         {
-            this.GameID = ranID.Next(0, 99);
             this.GameName = gameName;
             this.GameGenre = GameGenre;
         }
