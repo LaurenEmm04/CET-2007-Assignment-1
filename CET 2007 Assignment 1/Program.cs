@@ -5,10 +5,20 @@ using System.IO;
 using static CET2007A1.CustomExceptions;
 using System.Linq.Expressions;
 
+
+
+
 namespace CET2007A1
 {
+    /// <summary>
+    /// Program class. Holds all of the main
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// the main functions are here, such as the menu and 
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             PlayerManager playerManager = new PlayerManager();
@@ -20,6 +30,7 @@ namespace CET2007A1
             {
                 try
                 {
+                    //Loading the menu
                     Logger.GetInstance().Log("Menu Loaded.");
                     Console.WriteLine("Hi there!");
                     Console.WriteLine("Welcome to the player management system!");
@@ -50,111 +61,18 @@ namespace CET2007A1
 
                     else if (choice == "2")
                     {
-                        Logger.GetInstance().Log("Option 2 chosen. Searching for players..");
-                        Console.WriteLine("Are you searching with Username or ID?");
-                        string Search = Console.ReadLine();
-                        Player FoundPlayer = null; //sets it to be empty to start
-                        if (Search == "Username" || Search == "username") //if looking via username...
-                        {
-                            Logger.GetInstance().Log("Searching via username.");
-                            Console.WriteLine("Please enter the username you're looking for:");
-                            string NameSearch = Console.ReadLine();
-                            FoundPlayer = playerManager.FindPlayerByUsername(NameSearch);
-                        }
-                        else if (Search == "ID" || Search == "id")  //if looking via ID...
-                        {
-                            Logger.GetInstance().Log("Searching via ID.");
-                            Console.WriteLine("Please enter the player ID:");
-                            string IDSearch = Console.ReadLine();
-                            if (int.TryParse(IDSearch, out int id))
-                            {
-                                FoundPlayer = playerManager.FindPlayerByID(id);
-                            }
-                            else
-                            {
-                                Logger.GetInstance().Log("Unrecognised ID");
-                                Console.WriteLine("That ID is not recognised. Please try again.");
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            Logger.GetInstance().Log("Invalid search type.");
-                            Console.WriteLine("Invalid search type. Please type 'Username' or 'ID'.");
-                            continue;
-                        }
-
-                        // if found player is recognised..
-                        if (FoundPlayer != null)  //found player is not null
-                        {
-                            Logger.GetInstance().Log($"Player: {FoundPlayer.Username} | ID: {FoundPlayer.ID} found.");
-                            Console.WriteLine($"Player found: {FoundPlayer.Username} ID: {FoundPlayer.ID}");
-                            Logger.GetInstance().Log("Asking if they would like to record stats.");
-                            FoundPlayer.GetStatsInterface().RecordStats(gameLibrary); //calls record stats
-                        }
-                        else
-                        {
-                            Logger.GetInstance().Log("Player doesn't exist.");
-                            Console.WriteLine("This player doesn't exist.");
-                        }
-
+                        Logger.GetInstance().Log("Option 2 chosen. Updating players stats..");
+                        playerManager.UpdatePlayerStats(gameLibrary);  //calls the block for updating players
                     }
 
 
-                    //linear search as the methods FindPlayerByUsername() and FindPlayerByID() go through each player one by one
+                    
                     else if (choice == "3")
                     {
-                        Logger.GetInstance().Log("Option 3 chosen.");
-                        Console.WriteLine("Are you searching with Username or ID?");
-                        string search = Console.ReadLine();
-                        Player FoundPlayer = null; //player has not been found
-                        if (search == "Username" || search == "username")
-                        {
-                            Console.WriteLine("Please enter the Username your looking for");
-                            string UsernameSearch = Console.ReadLine();
-                            FoundPlayer = playerManager.FindPlayerByUsername(UsernameSearch);
-
-                        }
-                        else if (search == "ID" || search == "id")
-                        {
-                            Console.WriteLine("Please enter the ID your looking for");
-                            string IDSearch = Console.ReadLine();
-
-                            if (int.TryParse(IDSearch, out int id))
-                            {
-                                FoundPlayer = playerManager.FindPlayerByID(id);
-                            }
-                            else
-                            {
-                                Console.WriteLine("That isn't recognised. Please enter a username or ID");
-                                Logger.GetInstance().Log("Search input not recognised");
-                                continue;
-                            }
-                        }
-
-
-                        if (FoundPlayer != null)
-                        {
-                            Logger.GetInstance().Log($"Player recognised as {FoundPlayer.Username} - {FoundPlayer.ID}");
-                            Console.WriteLine($"Player found: {FoundPlayer.Username} (ID: {FoundPlayer.ID})");
-                            Console.WriteLine("Displaying player stats now..");
-                            Logger.GetInstance().Log("Displaying stats for the player..");
-
-                            FoundPlayer.GetStatsInterface().DisplayStats(); //displays the stats of the found player
-                        }
-                        else
-                        {
-                            Console.WriteLine("This player doesnt exist");
-                            Logger.GetInstance().Log("Player does not exist.");
-                        }
-                        Console.WriteLine("\nPress any key to return to the menu");
-                        Logger.GetInstance().Log("Returning to menu..");
-                        Console.ReadKey();
-
+                        Logger.GetInstance().Log("Option 3 chosen. Viewing player stats..");
+                        playerManager.ViewPlayerStats();
+                       
                     }
-
-
-
 
 
                     else if (choice == "4")
@@ -241,6 +159,11 @@ namespace CET2007A1
                 catch (DuplicatePlayerException ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
+                    Logger.GetInstance().Log(ex.Message);
+                }
+                catch (PlayerNotFoundException ex)
+                {
+                    Console.WriteLine(ex.Message);
                     Logger.GetInstance().Log(ex.Message);
                 }
                 catch (Exception ex)

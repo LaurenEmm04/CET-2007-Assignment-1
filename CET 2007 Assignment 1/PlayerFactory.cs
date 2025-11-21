@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CET2007A1
 {
+    /// <summary>
+    /// Creates a reusable factory class for player creation. 
+    /// </summary>
     public static class PlayerFactory
     {
         public static Player CreatePlayer(string username, int id)

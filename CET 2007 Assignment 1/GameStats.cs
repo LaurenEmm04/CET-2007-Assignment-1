@@ -14,7 +14,7 @@ namespace CET2007A1
         public int HighScore { get; set; }
 
         public GameStats() { } //for json
-        public GameStats(Game game)
+        public GameStats(Game game) //constructor
         {
             Game = game.GameName;
             HoursPlayed = 0;

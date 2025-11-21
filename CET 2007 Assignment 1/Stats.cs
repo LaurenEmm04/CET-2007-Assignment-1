@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace CET2007A1
 {
+    /// <summary>
+    /// Stats uses the 
+    /// </summary>
     class Stats : IUpdatableStats
     {
         public List<GameStats> GameStatsList { get; set; } = new List<GameStats>();
@@ -26,10 +29,17 @@ namespace CET2007A1
             {
                 Console.WriteLine("Showing all games in your game library..");
                 gameLibrary.GameList();
-                Console.WriteLine("Which game are you updating stats for? (please enter a game name)");
-                string gameNameInput = Console.ReadLine();
-
-                chosenGame = gameLibrary.FindGameByName(gameNameInput);
+                Console.WriteLine("Which game are you updating stats for? (please enter a game name or ID)");
+                string gameInput = Console.ReadLine();
+                if (int.TryParse(gameInput, out int gameID))
+                {
+                    chosenGame = gameLibrary.FindGameByID(gameID); //searches via ID first
+                }
+                else
+                {
+                    chosenGame = gameLibrary.FindGameByName(gameInput); //then searches via name if no id was entered
+                }
+                    
                 if (chosenGame == null)
                 {
                     Console.WriteLine("That game isn't in here! Add it instead!");
