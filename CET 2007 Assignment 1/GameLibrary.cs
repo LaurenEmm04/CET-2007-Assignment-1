@@ -57,6 +57,7 @@ namespace CET2007A1
                 return;
             }
 
+
             //otherwise, make it here
             Console.WriteLine("Please add the name of the game you wish to add to your library");
             string GName = Console.ReadLine();
@@ -66,19 +67,19 @@ namespace CET2007A1
             if (string.IsNullOrWhiteSpace(GName) || string.IsNullOrWhiteSpace(GGenre))
             {
                 Logger.GetInstance().Log("Error: Game and Genre were not correctly inputted. Retrying.");
-                Console.WriteLine("Please enter a name and a genre of your game in the areas provided");
+                Console.WriteLine("Error. Please enter a name and a genre of your game in the areas provided");
                 return;
             }
 
-            foreach (var existingGame in games) //for each game thats in the game list
-            {
-                if (existingGame.GameName.ToLower() == GName.ToLower()) //if the game your adding matches a game thats already in the list..
+                foreach (var existingGame in games) //for each game thats in the game list
                 {
-                    Console.WriteLine($"This game {GName} already exists in the library!");
-                    Logger.GetInstance().Log("Game attempted to add to library already exists. Duplicate game has not been added.");
-                    return; //doesnt add it to the library
+                    if (existingGame.GameName.ToLower() == GName.ToLower()) //if the game your adding matches a game thats already in the list..
+                    {
+                        Console.WriteLine($"This game {GName} already exists in the library!");
+                        Logger.GetInstance().Log("Game attempted to add to library already exists. Duplicate game has not been added.");
+                        return; //doesnt add it to the library
+                    }
                 }
-            }
 
 
             //adding new games
