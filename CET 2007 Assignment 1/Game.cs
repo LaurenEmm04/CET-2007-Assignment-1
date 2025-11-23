@@ -31,7 +31,7 @@ namespace CET2007A1
 
         public override string ToString()
         {
-            return $"{GameName} (ID: {GameID}) Genre: {GameGenre}";
+            return $"{GameName} (ID: {GameID}) Genre: {GameGenre}"; //whenever tostring is called on this game object it returns this format
         }
     }
 }

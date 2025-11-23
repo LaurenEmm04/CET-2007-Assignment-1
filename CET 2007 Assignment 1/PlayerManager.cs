@@ -23,56 +23,57 @@ namespace CET2007A1
         }
 
 
-        /// <summary>
-        /// Menu options shown below
-        /// Asks for Username and ID with validation and try/catch. Asks if user would like to update stats, if yes, redirects to there. If no, they are redirected to the menu.
-        /// Logs interactions as usual to Log.txt
-        /// </summary>
-        /// 
+        //menu options shown below
+       
 
         //---- MENU OPTION 1 ---------------------------------------------------------------------------------
+        /// <summary>
+        /// Adding players function with links to RecordStats later on
+        /// </summary>
+
+
         public void AddPlayers(GameLibrary gameLibrary)
         {
-            while (true)
+            while (true) //loops until outcome reached
             {
                 try
                 {
                     Logger.GetInstance().Log("Beginning to add players");
-                    Console.WriteLine("Please enter the name of the player you wish to add");
+                    Console.WriteLine("Please enter the name of the player you wish to add"); //logs actions, inputs desired username and ID
                     string Username = Console.ReadLine();
                     Console.WriteLine("Please enter the ID you wish your player to have");
                     string id = Console.ReadLine();
-                    if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id))
+                    if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(id)) //if either username or ID is empty..
                     {
                         Logger.GetInstance().Log("Usernmae and ID has not been entereed. Retrying.");
                         Console.WriteLine("You need to add a Username and an ID");
-                        continue; //back to start of loop to reenter
+                        continue; //back to start of loop to reenter usernme and ID
                     }
 
-                    bool isNumber = true;  //checking if id is a number
+                    bool isNumber = true;  //checking if id is a number. starts as true
                     foreach (char c in id)
                     {
-                        if (c < '0' || c > '9')
+                        if (c < '0' || c > '9')//goes through each character in ID and makes sure its a number
                         {
-                            isNumber = false;
+                            isNumber = false; //if they dont match between 0-9 then its marked as false
                             break;
                         }
                     }
-                    if (!isNumber)
+                    if (!isNumber) //if the input was marked as false
                     {
-                        Logger.GetInstance().Log("ID is not a number. Retrying.");
-                        throw new InvalidIDException("ID must be numeric.");
-                        //stops crashing errors via parse by taking the user back to start of loop again
+                        Logger.GetInstance().Log("ID is not a number. Retrying."); 
+                        throw new InvalidIDException("ID must be numeric.");  //logs and throws exception
+                        
                     }
 
-                    int ID = int.Parse(id);
+                    int ID = int.Parse(id);  //converts string to int
 
                     //check for duplicate ids
 
                     bool DuplicateID = false;
-                    foreach (var player in list)
+                    foreach (var player in list)  //checks each player in list
                     {
-                        if (player.ID == ID)
+                        if (player.ID == ID)  //if the id matches one a player already has..
                         {
                             Logger.GetInstance().Log($"A player with ID: {id} already exists. Retrying.");
                             throw new DuplicatePlayerException($"A player with ID {id} already exists. Please try a different ID");
@@ -80,30 +81,34 @@ namespace CET2007A1
 
                         }
                     }
-                    if (DuplicateID) continue; //if the ids a duplicate, go bacl to the start of the loop
+                      //if the ids a duplicate, go bacl to the start of the loop
+
+
 
                     //check for duplicate username
                     bool DuplicateUsername = false;
-                    foreach (var player in list)
+                    foreach (var player in list)  //checks each player in list
                     {
-                        if (player.Username == Username)
+                        if (player.Username == Username)  //if username is already used in player list..
                         {
                             Logger.GetInstance().Log($"A player with username: {Username} already exists. Retrying.");
                             Console.WriteLine($"A player with username {Username} already exists, Please try another one");
-                            DuplicateUsername = true;
+                            DuplicateUsername = true;  //sets DuplicateUsername to true, breaks loop and returns back to reinputting info
                             break;
                         }
                     }
                     if (DuplicateUsername) continue; //goes back to the start if duplicate
 
 
-                    //creating and adding players
-                    Player newPlayer = PlayerFactory.CreatePlayer(Username, ID);
+                    //creating and adding players 
+                    Player newPlayer = PlayerFactory.CreatePlayer(Username, ID);  //uses player factory for info on what to include
                     list.Add(newPlayer);
+                    Console.Clear();
                     Logger.GetInstance().Log($"Preparing to add {Username} with ID: {ID} to the list...");
                     Console.WriteLine($"Prepating to add player {Username} with ID {ID} to list of players");
                     Console.WriteLine("Make sure to save and exit, otherwise they wont be added!");
                     Logger.GetInstance().Log("Player creation complete.");
+                    
 
 
 
@@ -114,10 +119,10 @@ namespace CET2007A1
                     if (UpdateChoice == "yes" || UpdateChoice == "Yes" || UpdateChoice == "Y" || UpdateChoice == "y")
                     {
                         Logger.GetInstance().Log($"Stats are beginning to be updated for {Username} | {ID}");
-                        newPlayer.GetStatsInterface().RecordStats(gameLibrary);
+                        newPlayer.GetStatsInterface().RecordStats(gameLibrary); //jumps to record stats in stats, hidden by encapsulation so haas to go through the interface and stats interface
                     }
                     else
-                    {
+                    { //if something other is chosen then stats will not be updated.
                         Logger.GetInstance().Log($"Stats are not being updated for {Username} | {ID}");
                         Console.WriteLine("No worries! Feel free to record gaming stats later.");
                     }
@@ -126,6 +131,7 @@ namespace CET2007A1
                     Console.WriteLine("Please press any key");
                     Logger.GetInstance().Log("Returning to menu..");
                     Console.ReadKey();
+                    Console.Clear();
                     break;
                 }
                 catch (InvalidIDException ex) //if ID is not numeric
@@ -147,6 +153,11 @@ namespace CET2007A1
 
 
         //------     MENU OPTION 2    -------------------------------------------------------------------------
+        
+        /// <summary>
+        /// updates the current players' stats
+        /// </summary>
+
         public void UpdatePlayerStats(GameLibrary gameLibrary)
         {
 
@@ -165,18 +176,18 @@ namespace CET2007A1
                 Logger.GetInstance().Log("Searching via ID.");
                 Console.WriteLine("Please enter the player ID:");
                 string IDSearch = Console.ReadLine();
-                if (int.TryParse(IDSearch, out int id))
+                if (int.TryParse(IDSearch, out int id))  //turns string to int
                 {
-                    FoundPlayer = FindPlayerByID(id);
+                    FoundPlayer = FindPlayerByID(id); //if the player your looking fot matches one found in the list FoundPlayer is recognised.
                 }
-                else
+                else //if it doesnt..
                 {
                     Logger.GetInstance().Log("Unrecognised ID");
                     Console.WriteLine("That ID is not recognised. Please try again.");
                     throw new InvalidIDException("Please make sure to enter a number for the ID");
                 }
             }
-            else
+            else //other error
             {
                 Logger.GetInstance().Log("Invalid search type.");
                 Console.WriteLine("Invalid search type. Please type 'Username' or 'ID'.");
@@ -186,10 +197,10 @@ namespace CET2007A1
             // if found player is recognised..
             if (FoundPlayer != null)  //found player is not null
             {
-                Logger.GetInstance().Log($"Player: {FoundPlayer.Username} | ID: {FoundPlayer.ID} found.");
+                Console.Clear();
+                Logger.GetInstance().Log($"Player: {FoundPlayer.Username} | ID: {FoundPlayer.ID} found."); //logs found player
                 Console.WriteLine($"Player found: {FoundPlayer.Username} ID: {FoundPlayer.ID}");
-                Logger.GetInstance().Log("Asking if they would like to record stats.");
-                FoundPlayer.GetStatsInterface().RecordStats(gameLibrary); //calls record stats
+                FoundPlayer.GetStatsInterface().RecordStats(gameLibrary); //calls record stats to update stats
             }
             else
             {
@@ -205,17 +216,20 @@ namespace CET2007A1
 
         //------      MENU OPTION 3     ----------------------------------------------------------------------------
 
+        /// <summary>
+        /// viewing a players stats
+        /// </summary>
    
         public void ViewPlayerStats()
         {
             Console.WriteLine("Are you searching with Username or ID?");
             string search = Console.ReadLine();
-            Player FoundPlayer = null; //player has not been found
+            Player FoundPlayer = null; //player has not been found is set as default 
             if (search == "Username" || search == "username")
             {
                 Console.WriteLine("Please enter the Username your looking for");
                 string UsernameSearch = Console.ReadLine();
-                FoundPlayer = FindPlayerByUsername(UsernameSearch);
+                FoundPlayer = FindPlayerByUsername(UsernameSearch); //if name searched matches a name in the list
 
             }
             else if (search == "ID" || search == "id")
@@ -225,7 +239,7 @@ namespace CET2007A1
 
                 if (int.TryParse(IDSearch, out int id))
                 {
-                    FoundPlayer = FindPlayerByID(id);
+                    FoundPlayer = FindPlayerByID(id); //if id searched matches id in the list..
                 }
                 else
                 {
@@ -235,10 +249,11 @@ namespace CET2007A1
                 }
             }
 
-            if (FoundPlayer != null)
+            if (FoundPlayer != null) //if found player recognised
             {
+                Console.Clear();
                 Logger.GetInstance().Log($"Player recognised as {FoundPlayer.Username} - {FoundPlayer.ID}");
-                Console.WriteLine($"Player found: {FoundPlayer.Username} (ID: {FoundPlayer.ID})");
+                Console.WriteLine($"Player found: {FoundPlayer.Username} (ID: {FoundPlayer.ID})"); //logs, notifies and displays player stats
                 Console.WriteLine("Displaying player stats now..");
                 Logger.GetInstance().Log("Displaying stats for the player..");
 
@@ -246,19 +261,25 @@ namespace CET2007A1
             }
             else
             {
-                Console.WriteLine("This player doesnt exist");
+                Console.WriteLine("This player doesnt exist"); //name or id inputted does not match
                 Logger.GetInstance().Log("Player does not exist.");
                 throw new PlayerNotFoundException("This player is not found, you should add them instead!");
             }
             Console.WriteLine("\nPress any key to return to the menu");
             Logger.GetInstance().Log("Returning to menu..");
             Console.ReadKey();
+            Console.Clear();
         }
 
         //----------------------------------------------------------------------------------------------------
 
         // -----   MENU OPTION 4  ---------------------------------------------------------------------------------
 
+        
+        /// <summary>
+        /// Displaying the game library
+        /// </summary>
+        
         public void DisplayGameLibrary(GameLibrary gameLibrary)
         {
             Console.WriteLine("Showing all of the games in your game library");
@@ -281,6 +302,7 @@ namespace CET2007A1
                     Console.WriteLine("Please press any button to be redirected.");
                     Logger.GetInstance().Log("Returning to the menu..");
                     Console.ReadKey();
+                    Console.Clear();
                     break; //loop exit
                 }
             }
@@ -289,6 +311,10 @@ namespace CET2007A1
         //---------------------------------------------------------------------------------------------------
 
         //--------  MENU OPITON 5 ---------------------------------------------------------------------------
+        
+        /// <summary>
+        /// Displaying leaderboard. Options for unfiltered leaderboards, and filtered by Hours Played and High Score.
+        /// </summary>
         public void DisplayLeaderboard(Leaderboard leaderboard)
         {
             Console.WriteLine("Leaderboard options:");
@@ -331,6 +357,7 @@ namespace CET2007A1
             Console.WriteLine("Please press any key to return to the menu.");
             Console.ReadKey();
             Logger.GetInstance().Log("Returning to menu..");
+            Console.Clear();
         }
 
 

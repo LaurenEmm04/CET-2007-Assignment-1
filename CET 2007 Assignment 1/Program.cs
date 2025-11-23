@@ -18,7 +18,6 @@ namespace CET2007A1
         /// <summary>
         /// the main functions are here, such as the menu and 
         /// </summary>
-        /// <param name="args"></param>
         static void Main(string[] args)
         {
             PlayerManager playerManager = new PlayerManager();
@@ -42,6 +41,7 @@ namespace CET2007A1
                     Console.WriteLine("5. Show current leaderboard");
                     Console.WriteLine("6. Exit and save");
                     string choice = Console.ReadLine();
+                    Console.Clear();
 
                     if (choice == "6")
                     {
@@ -92,25 +92,25 @@ namespace CET2007A1
 
 
                 }
-                catch (InvalidIDException ex)
+                catch (InvalidIDException ex)  //if id not a number
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                     Logger.GetInstance().Log(ex.Message);
                 }
-                catch (DuplicatePlayerException ex)
+                catch (DuplicatePlayerException ex)  //if player username/id already exists
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                     Logger.GetInstance().Log(ex.Message);
                 }
-                catch (PlayerNotFoundException ex)
+                catch (PlayerNotFoundException ex) //if searched for player doesnt exist
                 {
                     Console.WriteLine(ex.Message);
                     Logger.GetInstance().Log(ex.Message);
                 }
-                catch (Exception ex)
+                catch (Exception ex)  //general exception
                 {
                     Console.WriteLine("Unexpected error occured, returing to menu");
-                    Logger.GetInstance().Log(ex.ToString());
+                    Logger.GetInstance().Log(ex.ToString());  //logs the exception found pulling all the info from it
                 }
 
 
