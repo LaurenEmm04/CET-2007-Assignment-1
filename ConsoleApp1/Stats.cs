@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace CET2007A1
 {
     /// <summary>
     /// Stats uses the 
     /// </summary>
-    class Stats : IUpdatableStats
+    public class Stats : IUpdatableStats
     {
-        public List<GameStats> GameStatsList { get; set; } = new List<GameStats>();
+        [JsonProperty]
+        private List<GameStats> GameStatsList = new List<GameStats>();
 
 
 

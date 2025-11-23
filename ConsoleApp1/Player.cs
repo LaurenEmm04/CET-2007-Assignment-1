@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CET2007A1
 {
@@ -17,8 +18,8 @@ namespace CET2007A1
         public int ID { get; set; }
         public string Username { get; set; }
 
-        [JsonInclude]  //allows playerstats to be used by json when saving and loading. Other code needs to access it though GetStatsInterface() to keep stats secure
-        private Stats PlayerStats { get; set; } // encapsulated
+        [JsonProperty]
+        private Stats PlayerStats { get; set; } // mostly encapsulated, needed to be public for JSON. not writable outside
 
         // expose only the interface for stats
         public IUpdatableStats GetStatsInterface() //returns PlayerStats but only through IUpdatableStats

@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace CET2007A1
 {
@@ -155,7 +156,7 @@ namespace CET2007A1
         {
             try
             {
-                string json = JsonSerializer.Serialize(games, new JsonSerializerOptions { WriteIndented = true });
+                string json = JsonConvert.SerializeObject(games, Formatting.Indented);
                 File.WriteAllText("Games.json", json);  //writing eveything game related to game.json
                 Console.WriteLine("Your game libary has been written to the file!");
                 Logger.GetInstance().Log("Game library saved."); //logging interaction
@@ -177,7 +178,7 @@ namespace CET2007A1
                     Logger.GetInstance().Log("Saved game library does not exist");
                     return;
                 }
-                string json = File.ReadAllText("Games.json"); //if its empty..
+                string json = File.ReadAllText("Games.json"); 
                 if (string.IsNullOrWhiteSpace(json))
                 {
                     Console.WriteLine("Your game library is empty");
@@ -185,7 +186,7 @@ namespace CET2007A1
                     return;
                 }
 
-                games = JsonSerializer.Deserialize<List<Game>>(json);  //if it exists and isnt empty..
+                games = JsonConvert.DeserializeObject<List<Game>>(json) ?? new List<Game>(); // ?? stops null values
                 Console.WriteLine("Your game libary is displayed below!"); //displays
                 Logger.GetInstance().Log("Game library displayed");
             }

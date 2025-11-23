@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.IO;
 using static CET2007A1.CustomExceptions;
+using Newtonsoft.Json;
 
 namespace CET2007A1
 {
@@ -362,7 +362,7 @@ namespace CET2007A1
             Console.Clear();
         }
 
-
+        //------------------------------------------------------------------------------------------------
 
 
 
@@ -412,8 +412,8 @@ namespace CET2007A1
         {
             try
             {
-                string Json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }); //serialise/writes the list to json
-                File.WriteAllText("Players.json", Json); //writes into this file
+                string jsonData = JsonConvert.SerializeObject(list, Formatting.Indented); //serialise/writes the list to json
+                File.WriteAllText("Players.json", jsonData); //writes into this file
                 Console.WriteLine("Players have been saved to the file!"); //console message for confirmation
             }
             catch (Exception ex) //error notice
@@ -435,14 +435,14 @@ namespace CET2007A1
                     return;
                 }
 
-                string Json = File.ReadAllText("Players.json");
+                string jsonData = File.ReadAllText("Players.json");
 
-                if (string.IsNullOrWhiteSpace(Json)) //if the file is empty but there
+                if (string.IsNullOrWhiteSpace(jsonData)) //if the file is empty but there
                 {
                     Console.WriteLine("No saved players are found. Add players to begin");
                     return;
                 }
-                list = JsonSerializer.Deserialize<List<Player>>(Json);
+                list = JsonConvert.DeserializeObject<List<Player>>(jsonData) ?? new List<Player>();  //deserialise, if unable to, make a new list instead of NULL
                 Console.WriteLine("Players have been loaded from the file!"); //if everything is ok, file is loaded and ready to be used successfully
             }
             catch (Exception ex)  //file loading error notice with logging
