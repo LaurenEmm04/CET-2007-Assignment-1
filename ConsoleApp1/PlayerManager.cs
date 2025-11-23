@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.IO;
 using static CET2007A1.CustomExceptions;
 
 namespace CET2007A1
@@ -71,7 +72,7 @@ namespace CET2007A1
 
                     //check for duplicate ids
 
-                    bool DuplicateID = false;
+                    
                     foreach (var player in list)  //checks each player in list
                     {
                         if (player.ID == ID)  //if the id matches one a player already has..
