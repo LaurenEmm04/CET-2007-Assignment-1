@@ -110,7 +110,7 @@ namespace CET2007A1
                     
                 }
             }
-            
+            Console.WriteLine($"Game: {NewGame.GameName} - Genre: {NewGame.GameGenre} - ID: {NewGame.GameID} has been added to the library.");
             Logger.GetInstance().Log($"Game: {NewGame.GameName} - Genre: {NewGame.GameGenre} - ID: {NewGame.GameID} has been added to the library.");
             games.Add(NewGame);  //added to the game list
             
