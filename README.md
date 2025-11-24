@@ -104,4 +104,4 @@ This is a singleton pattern class that logs the programs interactions as it goes
 ---
 
 ## Conclusion
-Overall, this project demonstrates good use of OOP principles to manage players, games and stats. JSON data persistance and organised code are used well and the choice to seperate responsibilities, use interfaces and to add design patterns helps keep the application maintainable, testable and easy to navigate.
+Overall, I feel like this project demonstrates good use of OOP principles to manage players, games and stats. JSON data persistance and organised code are used well and the choice to seperate responsibilities, use interfaces and to add design patterns helps keep the application maintainable, testable and easy to navigate.
