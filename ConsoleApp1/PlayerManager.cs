@@ -107,7 +107,7 @@ namespace CET2007A1
                     list.Add(newPlayer);
                     Console.Clear();
                     Logger.GetInstance().Log($"Preparing to add {Username} with ID: {ID} to the list...");
-                    Console.WriteLine($"Prepating to add player {Username} with ID {ID} to list of players");
+                    Console.WriteLine($"Preparing to add player {Username} with ID {ID} to list of players");
                     Console.WriteLine("Make sure to save and exit, otherwise they wont be added!");
                     Logger.GetInstance().Log("Player creation complete.");
 

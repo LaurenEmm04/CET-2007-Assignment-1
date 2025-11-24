@@ -21,7 +21,7 @@ namespace CET2007A1Tests
 
 
             stats.UpdateHoursPlayed(game2, 7);
-            stats.UpdateHighScore(game2, 200);
+            stats.UpdateHighScore(game2, 150);
 
             GameStats game1Stats = null;
             GameStats game2Stats = null;
@@ -37,9 +37,9 @@ namespace CET2007A1Tests
             Assert.AreEqual(8, game1Stats.HoursPlayed, "Game1 hours played is incorrect");
             Assert.AreEqual(0, game1Stats.HighScore, "Game1 high score is incorrect");
             Assert.AreEqual(7, game2Stats.HoursPlayed, "Game2 hours played is incorrect");
-            Assert.AreEqual(200, game2Stats.HighScore, "Game2 high score is incorrect");
+            Assert.AreEqual(150, game2Stats.HighScore, "Game2 high score is incorrect");
             Assert.AreEqual(15, stats.GetTotalPlayedHours(), "Total hours played is incorrect");
-            Assert.AreEqual(200, stats.GetTotalHighScore(), "Total high score is incorrect");
+            Assert.AreEqual(150, stats.GetTotalHighScore(), "Total high score is incorrect");
 
         }
 

@@ -47,7 +47,6 @@ namespace CET2007A1
         /// <summary>
         /// Adding games function
         /// </summary>
-        /// <param name="game"></param>
         public void AddGame(Game game = null)
         {
             //if a game object is passed through (already made), add it in
@@ -156,7 +155,7 @@ namespace CET2007A1
         {
             try
             {
-                string json = JsonConvert.SerializeObject(games, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(games, Formatting.Indented);  //differnt way to format using newtonsoft
                 File.WriteAllText("Games.json", json);  //writing eveything game related to game.json
                 Console.WriteLine("Your game libary has been written to the file!");
                 Logger.GetInstance().Log("Game library saved."); //logging interaction
@@ -186,7 +185,7 @@ namespace CET2007A1
                     return;
                 }
 
-                games = JsonConvert.DeserializeObject<List<Game>>(json) ?? new List<Game>(); // ?? stops null values
+                games = JsonConvert.DeserializeObject<List<Game>>(json) ?? new List<Game>(); // ?? = if nothings there originally it makes a new blank entry. stops null values
                 Console.WriteLine("Your game libary is displayed below!"); //displays
                 Logger.GetInstance().Log("Game library displayed");
             }

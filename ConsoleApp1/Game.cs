@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CET2007A1
 {
     /// <summary>
-    /// Creating main elements for the game class, s
+    /// Creating main elements for the game class
     /// </summary>
     public class Game
     {

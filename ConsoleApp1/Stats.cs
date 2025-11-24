@@ -89,9 +89,6 @@ namespace CET2007A1
                         gameStats.HighScore = newScore;
                         Console.WriteLine($"New high score logged into the system: {chosenGame.GameName}");
                         Logger.GetInstance().Log($"New high score logged for {chosenGame.GameName}");
-                        Console.WriteLine("Press any key to return to the menu");
-                        Console.ReadKey();
-                        Console.Clear();
 
                     }
                     else
