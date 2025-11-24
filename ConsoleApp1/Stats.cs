@@ -126,6 +126,13 @@ namespace CET2007A1
                 }
 
             }
+
+            if (gameStats == null)
+            {
+                gameStats = new GameStats(selectedGame);
+                GameStatsList.Add(gameStats);
+            }
+
             if (gameStats != null && newScore > gameStats.HighScore)
                 gameStats.HighScore = newScore;
 
@@ -144,6 +151,14 @@ namespace CET2007A1
                     break;
                 }
             }
+
+            if (stats == null)
+            {
+                stats = new GameStats(selectedGame);
+                GameStatsList.Add(stats);
+            }
+
+
             if (stats != null && newHours > 0)
                 stats.HoursPlayed += newHours;
 

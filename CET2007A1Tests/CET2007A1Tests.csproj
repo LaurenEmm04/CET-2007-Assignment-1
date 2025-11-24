@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="TestFixtureStatsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextFixture_LeaderboardTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
