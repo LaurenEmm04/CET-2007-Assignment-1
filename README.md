@@ -9,6 +9,12 @@ When I started making the program, I unknowingly made it using .NET 8.0 (Now nam
 
 OLD CET 2007 (the .NET 8.0 program) works the exact same way as the NET new one. I just had to convert it over and change some of the handling of private methods through Json. **The only thing missing is the Log.txt/Players.json/Stats.json from the old version. If I kept those logs, the program would try and read them. They would be unable to since its a different .NET version and would refuse to create new files. I have removed them from the project entirely but I still have access to the old logs, players and stats if required.**
 
+## Table of Contents
+- [How to Navigate the Commit History](#how-to-navigate-the-commit-history)
+- [How to Run My Program](#how-to-run-my-program)
+- [My Program: What and Why I made it this way](#my-program-what-and-why-i-made-it-this-way)
+- [Design Choices](#design-choices)
+
 ## How to navigate the Commit history
 
 All _commits are still available for the older NET 8.0 version_. The folder the code is in is _CET 2007 Assignment 1_. Again, this is the old version.
