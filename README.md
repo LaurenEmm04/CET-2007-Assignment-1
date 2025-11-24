@@ -8,8 +8,7 @@ In this project, I have created a working Player manager system with the ability
 - [How to Run My Program](#how-to-run-my-program)
 - [My Program: What and Why I made it this way](#my-program-what-and-why-i-made-it-this-way)
   - [Design Choices](#design-choices)
-  - [Testing](#testing)
-  - [Debugging Reflection](#debugging-reflection)
+- [Conclusion](#conclusion)
 
 
 ## Important Information
@@ -46,20 +45,21 @@ The tests are stored in CET2007A1Tests. To see the tests themselves if you can't
 ## My program. What and why i made it this way.
 Here I will discuss my process on why I created my program the way I did and how I did it.
 
-### Design Choices
+## Design Choices
 
 ---
 
 ### Player, PlayerManager and PlayerFactory
-To begin, I decided to keep Player, Stats and Game seperate to ensure they all handled only their own key information to keep the program easier to understand.
+To begin, I decided to keep Player, Stats and Game separate to ensure they all handled only their own key information to keep the program easier to understand.
 
 Later on, i would add classes like PlayerManager, which would focus on tasks such as holding the menu options, adding, updating and viewing players and their player stats. It also displays a players game library, the leaderboard, finds players by ID and Username, and manages saving/loading of player data. 
 
-I found having PlayerManager handle most of the methods, including the menu, kept Program.cs a lot cleaner and made everything easier to understand and follow as each methods purpose is clear from its name.
+I found having PlayerManager handle most of the methods, including the menu, kept Program.cs a lot cleaner and made everything easier to understand and follow as each methods purpose is clear from its name. Program.cs only handles the projects startup and menu navigation choices, which then leads back to PlayerManager. This keeps the programs entry point clean and focused.
 
 Moving on from PlayerManager, I created a factory pattern for player creation (PlayerFactory) as a way to streamline the consistent creation of players, reducing system load and speeding up actions.
 
-Finally, within the Player class, the PlayerStats property is marked with [JsonProperty]. This allows the private Stats object to be serialised and deserialised when saving or loading players to JSON files, ensuring each players stats persist between sessions whilst maintaining encapsulation. Furthermore, encapsulation is kept as all other methods must use GetStatsInterface, which returns only the public interface (IUpdatableStats) of PlayerStats, keeping the actual Stats object safely protected.
+Finally, within the Player class, the PlayerStats property is marked with [JsonProperty]. This allows the private Stats object to be serialised and deserialised when saving or loading players to JSON files, ensuring each players stats persist between sessions whilst maintaining encapsulation. Encapsulation is enforced because all other methods must access player stats through GetStatsInterface, which exposes only the public interface (IUpdatableStats) of PlayerStats. This stops external code from changing the Stats object directly, reducing the risk of accidental data corruption, and makes it easier to maintain and extend the Stats class in the future without breaking other parts of the program.
+
 
 ---
 
@@ -67,7 +67,7 @@ Finally, within the Player class, the PlayerStats property is marked with [JsonP
 
 For Stats, I wanted a class that would track a players progress across all their games. It handled things like the hours played and high scores for each game. Nothing else was added outside of that regard to keep it focused and simple. Each game gets its own GameStats object. This makes it easy to update or read stats for that particular game without affecting other games.
 
-The Stats class has methods like UpdateHoursPlayed and UpdateHighScore, which checks if a GameStats entry exists first, if it doesnt, then it would create one. This prevents issues where stats wern't recorded because no entry existed. I also included methods such as GetTotalPlayedHours and GetTotalHighScore so I can quickly summarize a players progress.
+The Stats class has methods like UpdateHoursPlayed and UpdateHighScore, which checks if a GameStats entry exists first, if it doesnt, then it would create one. This prevents issues where stats wern't recorded because no entry existed. I also included methods such as GetTotalPlayedHours and GetTotalHighScore so I can quickly summarise a players progress.
 
 DisplayStats lets the program print out stats in a clean, readable format, making it easy for players to see their performance. Overall, having my program like this keeps stats modular and easy to update, as well as easy to debug.
 
@@ -84,3 +84,24 @@ The combination of Game, GameStats and GameLibrary ensures a clean separation be
 
 ---
 
+### CustomExceptions
+This contains exceptions such as PlayerNotFoundExeption, InvalidIDException and DuplicatePlayerException. They provide clear and specific error handling, which improves the usability of the program.
+
+---
+
+### IUpdatableStats
+This defines key methods that must be used whenever it is called. This includes updating scores and hours, display stats and retrieving totals. Using this interface allows safe access to a players stats whilst maintaining encapsulation and limiting crashes from user input errors.
+
+--- 
+### Leaderboard
+This manages sorting and displaying players by high score or hours played. It lets the user choose if they'd like to filter the searching by a specific game or not. Separating the leaderboard logic keeps the Player and Stats classes focused solely on their core responsibilities.
+
+---
+
+### Logger
+This is a singleton pattern class that logs the programs interactions as it goes on (adding games, moving from menu options, updating information, closing the program ect..) by adding the code line Logger.GetInstance().Log("") wherever a particularly notable action takes place. It helps with tracing paths of what was done, which helps debugging.
+
+---
+
+## Conclusion
+Overall, this project demonstrates good use of OOP principles to manage players, games and stats. JSON data persistance and organised code are used well and the choice to seperate responsibilities, use interfaces and to add design patterns helps keep the application maintainable, testable and easy to navigate.
