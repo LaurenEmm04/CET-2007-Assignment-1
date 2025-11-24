@@ -74,7 +74,7 @@ DisplayStats lets the program print out stats in a clean, readable format, makin
 ---
 
 ### Game, GameStats and GameLibrary
-I kept Game simple and easy to understand, having it store only the name, genre and unique ID for each game. It was made as a container, so other parts of the program (like GameLibrary or Stats) could use it without any problems. The random ID system makes sure that each game has a unique identifier, even if __multiple games have the same name__ By keeping it small and easy to understand, I've reduced the program's complexity and made debugging easier.
+I kept Game simple and easy to understand, having it store only the name, genre and unique ID for each game. It was made as a container, so other parts of the program (like GameLibrary or Stats) could use it without any problems. The random ID system makes sure that each game has a unique identifier, even if multiple games have the same name. By keeping it small and easy to understand, I've reduced the program's complexity and made debugging easier.
 
 GameStats works in tandem with Game by keeping track of the players interactions with each game. It stores the hours played and high score of each game. Instead of linking the full Game object, it only stores the games name, making JSON serialisation simple and reliable. This allows Stats to manage the tracking of player performance without needing to modify the actual Game objects.
 
