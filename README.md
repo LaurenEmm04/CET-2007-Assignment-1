@@ -2,6 +2,16 @@
 
 In this project, I have created a working Player manager system with the ability to create new players, add stats (high score and hours played), log new games and add stats to certain games as well as a functional leaderboard with the ability to sort via high score or hours played with the option to filter by games chosen if you wish.
 
+## Table of Contents
+- [Important Information](#important-information)
+- [How to Navigate the Commit History](#how-to-navigate-the-commit-history)
+- [How to Run My Program](#how-to-run-my-program)
+- [My Program: What and Why I made it this way](#my-program-what-and-why-i-made-it-this-way)
+-   [Design Choices](#design-choices)
+-   [Testing](#testing)
+-   [Debugging Reflection](#debugging-reflection)
+
+
 ## Important Information
 As you can see, there are multiple folders in here. Please follow these instructions to find the code your looking for.
 
@@ -9,11 +19,6 @@ When I started making the program, I unknowingly made it using .NET 8.0 (Now nam
 
 OLD CET 2007 (the .NET 8.0 program) works the exact same way as the NET new one. I just had to convert it over and change some of the handling of private methods through Json. **The only thing missing is the Log.txt/Players.json/Stats.json from the old version. If I kept those logs, the program would try and read them. They would be unable to since its a different .NET version and would refuse to create new files. I have removed them from the project entirely but I still have access to the old logs, players and stats if required.**
 
-## Table of Contents
-- [How to Navigate the Commit History](#how-to-navigate-the-commit-history)
-- [How to Run My Program](#how-to-run-my-program)
-- [My Program: What and Why I made it this way](#my-program-what-and-why-i-made-it-this-way)
-- [Design Choices](#design-choices)
 
 ## How to navigate the Commit history
 
