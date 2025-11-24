@@ -43,18 +43,38 @@ The tests are stored in CET2007A1Tests. To see the tests themselves if you can't
 <img width="300" height="175" alt="image" src="https://github.com/user-attachments/assets/a2ba26dd-dce2-4647-b47a-6069f7a2f124" />
 
 
-
-
-
-
-
-
-
-
-
-
 ## My program. What and why i made it this way.
 Here I will discuss my process on why I created my program the way I did.
 
 ### Design Choices
+To begin, I decided to keep Player, Stats and Game seperate to ensure they all handled only their own key information to keep the program easier to understand.
+
+### Player, PlayerManager and PlayerFactory
+To begin, I decided to keep Player, Stats and Game seperate to ensure they all handled only their own key information to keep the program easier to understand.
+
+Later on, i would add classes like PlayerManager, which would focus on tasks such as holding the menu options, adding, updating and viewing players and their player stats. It also displays a players game library, the leaderboard, finds players by ID and Username, and manages saving/loading of player data. 
+
+I found having PlayerManager handle most of the methods, including the menu, kept Program.cs a lot cleaner and made everything easier to understand and follow as each methods purpose is clear from its name.
+
+Moving on from PlayerManager, I created a factory pattern for player creation (PlayerFactory) as a way to streamline the consistent creation of players, reducing system load and speading up actions.
+
+Finally, within the Player class, the PlayerStats property is marked with [JsonProperty]. This allows the private Stats object to be serialised and deserialised when saving or loading players to JSON files, ensuring each players stats persist between sessions whilst maintaining encapsulation. Furthermore, encapsulation is kept as all other methods must use GetStatsInterface, which returns only the public interface (IUpdatableStats) of PlayerStats, keeping the actual Stats object safely protected.
+
+### Stats
+
+For Stats, I wanted a class that would track a players progress across all their games. It handled things like the hours played and high scores for each game. Nothing else was added outside of that regard to keep it focused and simple. Each game gets its own GameStats object. This makes it easy to update or read stats for that particular game without affecting other games.
+
+The Stats class has methods like UpdateHoursPlayed and UpdateHighScore, which checks if a GameStats entry exists first, if it doesnt, then it would create one. This prevents issues where stats wernt recorded because no entry existed. I also included methods such as GetTotalPlayedHours and GetTotalHighScore so I can quickly summarize a players progress.
+
+DisplayStats lets the program print out stats in a clean, readable format, making it easy for players to see their performance. Overall, having my program like this keeps stats modular and easy to update, as well as easy to debug.
+
+### Game, GameStats and GameLibrary
+I kept Game simple and easy to understand, having it store only the name, genre and unique ID for each game. It was made as a container, so other parts of the program (like GameLibrary or Stats) could use it without any problems. The random ID system makes sure that each game has a unique identifier, even if __multiple games have the same name__ By keeping it small and easy to understand, ive reduced the programs complexity and made debugging easier.
+
+GameStats works in tandem with Game by keeping track of the players interactions with each game. It stores the hours played and high score of each game. Instead of linking the full Game object, it only stores the games name, making JSON serialisation simple and reliable. This allows Stats to manage the tracking of player performance without needing to modify the actual Game objects.
+
+GameLibrary is used as the area for all things relating to the game handling. It handles listing games, adding new ones (with checks for duplicate names and IDs) and finding games via Name or ID. Furthermore, it also handles saving and loading the library to a JSON file, which ensures the data persists between sessions.
+
+The combination of Game, GameStats and GameLibrary ensures a clean seperation between tracking player performance and managing the collection of games. This makes the program easier to read, test and debug.
+
 
