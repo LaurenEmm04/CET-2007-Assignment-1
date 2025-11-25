@@ -31,7 +31,6 @@ namespace CET2007A1
                 try
                 {
                     //Loading the menu
-                    Console.WriteLine(Path.GetFullPath("Players.json"));
                     Logger.GetInstance().Log("Menu Loaded.");
                     Console.WriteLine("Hi there!");
                     Console.WriteLine("Welcome to the player management system!");

@@ -259,7 +259,7 @@ namespace CET2007A1
                 Console.WriteLine("Displaying player stats now..");
                 Logger.GetInstance().Log("Displaying stats for the player..");
 
-                FoundPlayer.GetStatsInterface().DisplayStats(); //displays the stats of the found player
+                FoundPlayer.GetStatsInterface().DisplayStats(); //displays the stats of the found player. found in STATS
             }
             else
             {
